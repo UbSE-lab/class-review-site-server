@@ -1,0 +1,33 @@
+package org.classreviewsite.data;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Entity
+@Table(name = "Likes", uniqueConstraints = @UniqueConstraint(columnNames = {"postId", "userNumber"}))
+public class LikesPostUserRelationShip {
+
+    // 좋아요를 한다
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long likeId;
+
+    // 해당 수강 후기 글에
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postId", nullable = false, unique = false)
+    private ReviewPost reviewPost;
+
+    // 해당 학생이
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userNumber", nullable = false, unique = false)
+    private User user;
+
+
+}
