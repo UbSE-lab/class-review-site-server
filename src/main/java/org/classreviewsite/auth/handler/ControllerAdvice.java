@@ -1,12 +1,17 @@
 package org.classreviewsite.auth.handler;
 
+import io.jsonwebtoken.MalformedJwtException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
+import org.apache.logging.log4j.message.ReusableMessage;
 import org.classreviewsite.auth.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.lang.ClassNotFoundException;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
@@ -16,68 +21,73 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class ControllerAdvice {
 
-    @ExceptionHandler(value = NoSuchElementException.class)
-    protected ResponseEntity<HashMap<String, Object>> noSuchElementExceptionHandler(NoSuchElementException exception){
-        HashMap<String, Object> response = new HashMap<>();
+    @Data
+    @AllArgsConstructor
+    class Result<T>{
+        private int status;
+        private T data;
+        private String message;
+    }
 
-        response.put("status", 401);
-        response.put("message", exception.getMessage());
-        return new ResponseEntity<>(response, NOT_FOUND);
+
+    @ExceptionHandler(value = NoSuchElementException.class)
+    protected Result noSuchElementExceptionHandler(NoSuchElementException exception){
+        return new Result(401, null, exception.getMessage());
     }
 
     @ExceptionHandler(value = InValidTokenException.class)
-    protected ResponseEntity<HashMap<String, Object>> inValidTokenException(InValidTokenException exception){
-        HashMap<String, Object> response = new HashMap<>();
-
-        response.put("status" , 402);
-        response.put("message", exception.getMessage());
-        return new ResponseEntity<>(response, NOT_ACCEPTABLE);
+    protected Result inValidTokenException(InValidTokenException exception){
+        return new Result(402, null, exception.getMessage());
     }
 
     @ExceptionHandler(value = UserNotFoundException.class)
-    protected ResponseEntity<HashMap<String, Object>> UserNotFoundException(UserNotFoundException exception){
-        HashMap<String, Object> response = new HashMap<>();
-
-        response.put("status", 401);
-        response.put("message", exception.getMessage());
-        return new ResponseEntity<>(response, NOT_FOUND);
+    protected Result UserNotFoundException(UserNotFoundException exception){
+        return new Result(401, null, exception.getMessage());
     }
 
     @ExceptionHandler(value = UserExistException.class)
-    protected ResponseEntity<HashMap<String, Object>> UserExistException(UserExistException exception){
-        log.info("??" );
-        HashMap<String, Object> response = new HashMap<>();
-
-        response.put("status", 204);
-        response.put("message", exception.getMessage());
-        return new ResponseEntity<>(response, NO_CONTENT);
+    protected Result UserExistException(UserExistException exception){
+        return new Result(204, null, exception.getMessage());
     }
 
     @ExceptionHandler(value = UserNumberLimitException.class)
-    protected ResponseEntity<HashMap<String, Object>> UserNumberLimitException(UserNumberLimitException exception){
-        HashMap<String, Object> response = new HashMap<>();
-
-        response.put("status", 403);
-        response.put("message", exception.getMessage());
-        return new ResponseEntity<>(response, FORBIDDEN);
+    protected Result UserNumberLimitException(UserNumberLimitException exception){
+        return new Result(403, null, exception.getMessage());
     }
 
     @ExceptionHandler(value = LectureNotFoundException.class)
-    protected ResponseEntity<HashMap<String,Object>> LectureNotFoundException(LectureNotFoundException exception){
-        HashMap<String, Object> response = new HashMap<>();
-
-        response.put("status", 401);
-        response.put("message", exception.getMessage());
-        return new ResponseEntity<>(response, NOT_FOUND);
+    protected Result LectureNotFoundException(LectureNotFoundException exception){
+        return new Result(401, null, exception.getMessage());
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
-    protected ResponseEntity<HashMap<String, Object>> IllegalArgumentException(IllegalArgumentException exception){
-        HashMap<String, Object> response = new HashMap<>();
+    protected Result IllegalArgumentException(IllegalArgumentException exception){
+        return new Result(403, null, exception.getMessage());
+    }
 
-        response.put("status", 403);
-        response.put("message", exception.getMessage());
-        return new ResponseEntity<>(response, NOT_FOUND);
+    @ExceptionHandler(value = ReviewNotFoundException.class)
+    protected Result ReviewNotFoundException(ReviewNotFoundException exception){
+        return new Result(202, null, exception.getMessage());
+    }
+
+    @ExceptionHandler(value = MalformedJwtException.class)
+    protected Result MalformedJwtException(MalformedJwtException exception){
+        return new Result(401, null, "토큰이 유효하지 않습니다.");
+    }
+
+    @ExceptionHandler(value = AlreadyWritePostException.class)
+    protected Result AlreadyWritePostException(AlreadyWritePostException exception){
+        return new Result(401, null, exception.getMessage());
+    }
+
+    @ExceptionHandler(value = AlreadyLikeException.class)
+    protected Result AlreadyLikeException(AlreadyLikeException exception){
+        return new Result(202, null, exception.getMessage());
+    }
+
+    @ExceptionHandler(value = ClassNotFoundException.class)
+    protected Result ClassNotFoundException(ClassNotFoundException exception){
+        return new Result(202, null, exception.getMessage());
     }
 
 
