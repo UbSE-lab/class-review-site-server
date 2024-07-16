@@ -1,10 +1,12 @@
 package org.classreviewsite.data;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.classreviewsite.auth.util.BaseTimeEntity;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,12 +14,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "ReviewPost", uniqueConstraints = @UniqueConstraint(columnNames = {"lecId", "userNumber"}))
-public class ReviewPost {
+public class ReviewPost  extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecId", nullable = false, unique = false)
@@ -38,6 +39,7 @@ public class ReviewPost {
 
     @Column(nullable = false, length = 45, unique = false)
     private Integer likes;
+
 
 
     /**

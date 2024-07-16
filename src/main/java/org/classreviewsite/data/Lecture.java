@@ -22,10 +22,44 @@ public class Lecture {
     @Column(nullable = false, length = 45 , unique = false)
     private String lectureName;
 
+    @Column(nullable = true, unique = false)
+    private Long averageStarLating;
+
+    @Column(nullable = true, unique = false)
+    private Long totalStarLating;
+
+    @Column(nullable = true, unique = false)
+    private Long reviewCount;
+
     @Column(nullable = false, length = 45, unique = false)
     private String department;
 
+    @Column(nullable = false, length = 45, unique = false)
+    private String university;
+
     @Enumerated(EnumType.STRING)
     private LectureType lectureType;
+
+
+    public void updateAverageStarLating(Long updateLating){
+        this.averageStarLating = updateLating;
+    }
+
+    public void updateTotalStarLating(Long plusLating){
+        this.totalStarLating = totalStarLating + plusLating;
+    }
+
+    public void updateReviewCount(){
+        this.reviewCount = reviewCount+1;
+    }
+
+    public void cancelTotalStarLating(Long minusLating){
+        this.totalStarLating = totalStarLating - minusLating;
+    }
+
+    public void cancelReviewCount(){
+        this.reviewCount = reviewCount - 1;
+    }
+
 
 }

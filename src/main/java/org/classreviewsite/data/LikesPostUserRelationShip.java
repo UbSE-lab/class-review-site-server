@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Entity
-@Table(name = "Likes", uniqueConstraints = @UniqueConstraint(columnNames = {"postId", "userNumber"}))
+@Table(name = "Likes", uniqueConstraints = @UniqueConstraint(columnNames = {"reviewId", "userNumber"}))
 public class LikesPostUserRelationShip {
 
     // 좋아요를 한다
@@ -21,7 +21,7 @@ public class LikesPostUserRelationShip {
 
     // 해당 수강 후기 글에
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postId", nullable = false, unique = false)
+    @JoinColumn(name = "reviewId", nullable = false, unique = false)
     private ReviewPost reviewPost;
 
     // 해당 학생이

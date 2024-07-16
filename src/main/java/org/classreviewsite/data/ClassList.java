@@ -16,15 +16,12 @@ import lombok.NoArgsConstructor;
 public class ClassList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, length = 20, unique = true)
+    // 교과목번호
     private Long classNumber;
-
 
     @Column(columnDefinition = "TEXT", nullable = true, length = 255, unique = false)
     private String classIntroduction;
-
-    @Column(nullable = true, length = 45, unique = false)
-    private Long averageStarLating;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecId")
@@ -34,13 +31,10 @@ public class ClassList {
     @JoinColumn(name = "professorId")
     private Professor professor;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "imageNumber", unique = false)
     private ImageUrl captainImage;
 
-    public void updateAverageStarLating(){
-        this.averageStarLating = averageStarLating;
-    }
 
 
 }
